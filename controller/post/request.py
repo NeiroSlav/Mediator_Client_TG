@@ -18,4 +18,4 @@ async def _send_post_request(url: str, data: json):
         try:
             return await client.post(url, data=data)
         except Exception as e:
-            return False
+            print(e)
