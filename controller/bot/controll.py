@@ -1,5 +1,7 @@
 from controller.bot.init import bot
 from controller.message_dto import MessageDTO
+import requests
+from aiogram.types import FSInputFile
 
 
 # отправка сообщения ботом
@@ -9,7 +11,7 @@ async def send_personal_message(message_dto: MessageDTO):
         await bot.send_photo(
             chat_id=message_dto.chat_id, 
             caption=message_dto.text,
-            photo=message_dto.image,
+            photo=_load_image(message_dto.image),
         )
     elif message_dto.text:  # если есть текст
         await bot.send_message(
@@ -26,3 +28,13 @@ async def send_personal_message(message_dto: MessageDTO):
             chat_id=message_dto.chat_id,
             sticker=message_dto.meta['sticker']
         )
+
+# Скачивание изображения во временный файл
+def _load_image(image_url: str):
+        response = requests.get(image_url)
+
+        temp_file_path = 'temp_image.jpg'
+        with open(temp_file_path, 'wb') as file:
+            file.write(response.content)
+
+        return FSInputFile(temp_file_path)

@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from aiogram import types
+from controller.bot.init import bot
+from const import BOT_TOKEN
 
 
 # универсальный объект передачи сообщений
@@ -12,7 +14,7 @@ class MessageDTO(BaseModel):
     meta: dict
 
     @classmethod  # фабричный метод, создающий объект из сообщения телеграмма
-    def parce_tg(cls, message: types.Message):
+    async def parce_tg(cls, message: types.Message):
         chat_id = message.chat.id
         if message.message_thread_id:
             chat_id = message.message_thread_id
@@ -22,7 +24,9 @@ class MessageDTO(BaseModel):
         meta = {}
 
         if message.photo:  # если есть фото, берёт его id и подпись
-            image = message.photo[-1].file_id
+            file_id = message.photo[-1].file_id
+            file = await bot.get_file(file_id)
+            image = f'https://api.telegram.org/file/bot{BOT_TOKEN}/{file.file_path}'
             text = message.caption
 
         elif message.text:  # или если есть просто текст, берёт его 

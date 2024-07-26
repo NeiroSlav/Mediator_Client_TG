@@ -8,5 +8,5 @@ from controller.bot.filters import MyAbonChatFilter
 # хендлер сообщения в личку бота
 @dp.message(MyAbonChatFilter())
 async def get_personal_message(message: types.Message):
-    message_dto = MessageDTO.parce_tg(message)
+    message_dto = await MessageDTO.parce_tg(message)
     await send_to_server(message_dto)
