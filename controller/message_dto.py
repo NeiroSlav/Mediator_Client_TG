@@ -23,6 +23,9 @@ class MessageDTO(BaseModel):
         image = None
         meta = {}
 
+        if message.document:  # если отправил документ
+            return None
+
         if message.photo:  # если есть фото, берёт его id и подпись
             file_id = message.photo[-1].file_id
             file = await bot.get_file(file_id)
