@@ -37,6 +37,9 @@ class MessageDTO(BaseModel):
 
         elif message.sticker:  # или если есть стикер, берёт id
             meta['sticker'] = message.sticker.file_id
+
+        if not (text or image or meta):  # если нет контента
+            return None
             
         return cls(
             social = 'tg',
