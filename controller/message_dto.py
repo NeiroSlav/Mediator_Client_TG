@@ -24,7 +24,7 @@ class MessageDTO(BaseModel):
         meta = {}
 
         if message.document:  # если отправил документ
-            return None
+            raise TypeError
 
         if message.photo:  # если есть фото, берёт его id и подпись
             file_id = message.photo[-1].file_id

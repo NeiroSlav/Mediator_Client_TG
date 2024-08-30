@@ -9,8 +9,9 @@ from const import UNSUPPORTED_CONTENT_TEXT
 # хендлер сообщения в личку бота
 @dp.message(MyAbonChatFilter())
 async def get_personal_message(message: types.Message):
-    message_dto = await MessageDTO.parce_tg(message)
-    if not message_dto:
-        await message.reply(UNSUPPORTED_CONTENT_TEXT)
-    else:
+    
+    try:
+        message_dto = await MessageDTO.parce_tg(message)
         await send_to_server(message_dto)
+    except TypeError:
+        await message.reply(UNSUPPORTED_CONTENT_TEXT)
